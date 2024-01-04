@@ -1,3 +1,2 @@
-#!/usr/bin/python3
 #!/bin/bash
 print("This is my first python code")
