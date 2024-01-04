@@ -1,2 +1,2 @@
 #!/bin/bash
-print("This is my first python code")
+python3 $PYFILE
