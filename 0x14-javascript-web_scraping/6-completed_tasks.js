@@ -4,7 +4,8 @@ const request = require('request');
 const process = require('process');
 
 // Check if the API URL is provided as the first argument
-if (process.argv.length < 3) {
+if (process.argv.length < 3)
+{
   console.log('Usage: ./count_completed_tasks.js <API_URL>');
   process.exit(1);
 }
