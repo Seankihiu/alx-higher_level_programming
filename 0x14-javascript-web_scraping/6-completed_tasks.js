@@ -1,37 +1,26 @@
 #!/usr/bin/node
 
 const request = require('request');
-const process = require('process');
+const url = process.argv[2];
 
-// Check if the API URL is provided as the first argument
-if (process.argv.length < 3)
-{
-  console.log('Usage: ./count_completed_tasks.js <API_URL>');
-  process.exit(1);
-}
-
-const apiUrl = process.argv[2];
-
-request.get(apiUrl, { json: true }, (error, response, body) => {
-  if (error) {
-    console.error(`Error: ${error.message}`);
-  } else if (response.statusCode !== 200) {
-    console.error(`Error: Received status code ${response.statusCode}`);
-  } else {
-    const completedTasks = {};
-
-    body.forEach(task => {
-      if (task.completed) {
-        if (completedTasks[task.userId]) {
-          completedTasks[task.userId]++;
-        } else {
-          completedTasks[task.userId] = 1;
-        }
-      }
-    });
-
-    for (const userId in completedTasks) {
-      console.log(`User ${userId} has completed ${completedTasks[userId]} tasks.`);
-    }
-  }
+request(url, function (err, response, body) {
+	  if (err) {
+		      console.log(err);
+		    } else if (response.statusCode === 200) {
+			        const completed = {};
+			        const tasks = JSON.parse(body);
+			        for (const i in tasks) {
+					      const task = tasks[i];
+					      if (task.completed === true) {
+						              if (completed[task.userId] === undefined) {
+								                completed[task.userId] = 1;
+								              } else {
+										                completed[task.userId]++;
+										              }
+						            }
+					    }
+			        console.log(completed);
+			      } else {
+				          console.log('An error occured. Status code: ' + response.statusCode);
+				        }
 });
