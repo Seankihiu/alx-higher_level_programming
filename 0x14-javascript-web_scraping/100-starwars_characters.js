@@ -1,34 +1,21 @@
 #!/usr/bin/node
-const request = require('request');
-const process = require('process');
 
-// Check if the movie ID is provided as the first argument
-if (process.argv.length < 3) {
-  console.log('Usage: ./print_star_wars_characters.js <Movie_ID>');
-  process.exit(1);
-}
-
-const movieID = process.argv[2];
-const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieID}`;
-
-request.get(apiUrl, { json: true }, (error, response, body) => {
-  if (error) {
-    console.error(`Error: ${error.message}`);
-  } else if (response.statusCode !== 200) {
-    console.error(`Error: Received status code ${response.statusCode}`);
-  } else {
-    const characters = body.characters;
-    
-    characters.forEach(characterUrl => {
-      request.get(characterUrl, { json: true }, (error, response, body) => {
-        if (error) {
-          console.error(`Error: ${error.message}`);
-        } else if (response.statusCode !== 200) {
-          console.error(`Error: Received status code ${response.statusCode}`);
-        } else {
-          console.log(body.name);
-        }
-      });
-    });
-  }
+const req = require('request');
+const id = process.argv[2];
+const url = 'https://swapi-api.hbtn.io/api/films/';
+req.get(url + id, function (error, res, body) {
+	  if (error) {
+		      console.log(error);
+		    }
+	  const data = JSON.parse(body);
+	  const dd = data.characters;
+	  for (const i of dd) {
+		      req.get(i, function (error, res, body1) {
+			            if (error) {
+					            console.log(error);
+					          }
+			            const data1 = JSON.parse(body1);
+			            console.log(data1.name);
+			          });
+		    }
 });
